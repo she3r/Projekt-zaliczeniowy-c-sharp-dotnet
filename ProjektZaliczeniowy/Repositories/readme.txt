@@ -1,0 +1,1 @@
+﻿Repository - storage of the entity beans in the system

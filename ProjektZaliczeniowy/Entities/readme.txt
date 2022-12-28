@@ -1,0 +1,1 @@
+Entities - klasy, które będą przechowywane w repozytoriach
