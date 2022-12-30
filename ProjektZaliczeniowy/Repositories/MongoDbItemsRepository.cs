@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using ProjektZaliczeniowy.Entities;
-
+// await keyword provides a nonblocking way to start a task, then continue execution when that task completes.
 namespace ProjektZaliczeniowy.Repositories
 {
     public class MongoDbItemsRepository : IItemsRepository
@@ -10,6 +13,7 @@ namespace ProjektZaliczeniowy.Repositories
         private const string databaseName = "ProjektZaliczeniowy";
         private const string collectionName = "items";
         private readonly IMongoCollection<Item> itemsCollection;
+        private readonly FilterDefinitionBuilder<Item> filterBuilder = Builders<Item>.Filter;
 
         public MongoDbItemsRepository(IMongoClient mongoClient)
         {
@@ -17,29 +21,33 @@ namespace ProjektZaliczeniowy.Repositories
             itemsCollection = database.GetCollection<Item>(collectionName);
 
         }
-        public IEnumerable<Item> GetItems()
+        public async Task<IEnumerable<Item>> GetItemsAsync()
         {
-            throw new NotImplementedException();
+            return await itemsCollection.Find(new BsonDocument()).ToListAsync(); // pusty plik jako filtr
+            // https://stackoverflow.com/questions/30650722/difference-between-find-and-findasync
         }
 
-        public Item GetItem(Guid id)
+        public async Task<Item> GetItemAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var filter = filterBuilder.Eq(item => item.Id, id);
+            return await itemsCollection.Find(filter).SingleOrDefaultAsync();
         }
 
-        public void CreateItem(Item item)
+        public async Task CreateItemAsync(Item item)
         {
-            itemsCollection.InsertOne(item);
+            await itemsCollection.InsertOneAsync(item);
         }
 
-        public void UpdateItem(Item item)
+        public async Task UpdateItemAsync(Item item)
         {
-            throw new NotImplementedException();
+            var filter = filterBuilder.Eq(existingItem => existingItem.Id, item.Id);
+            await itemsCollection.ReplaceOneAsync(filter, item);
         }
 
-        public void DeleteItem(Guid id)
+        public async Task DeleteItemAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var filter = filterBuilder.Eq(item => item.Id, id);
+            await itemsCollection.DeleteOneAsync(filter);
         }
     }
 }

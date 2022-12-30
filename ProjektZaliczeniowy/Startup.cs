@@ -34,21 +34,26 @@ namespace ProjektZaliczeniowy
         {
             BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String)); // serializuje kazdy guid w bazie danych na string
             BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(BsonType.String)); // serializuje kazda date w bazie danych na string
-
+            // singletony
             services.AddSingleton<IMongoClient>(provider =>
             {
-                var settings = Configuration.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();
+                var settings = Configuration.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();    
+                // wez ustawienia z appsettings.json (27017 to port w dockerze)
                 return new MongoClient(settings.ConnectionString);
-            }); // funkcja ktora konstruuje ten singleton
+            }); 
+            // singleton powoduje ze id z repozytorium pozostaja te same czyli z kazdym requestem nie tworzy sie nowa kolekcja
+            services.AddSingleton<IItemsRepository, MongoDbItemsRepository>();
             
-            services.AddControllers();
+            services.AddControllers(options =>
+            {
+                options.SuppressAsyncSuffixInActionNames = false;
+                // nie chcemy usuwac sufiksow w runtimie bo wykorzystujemy nameof 
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProjektZaliczeniowy", Version = "v1" });
             });
-            // services.AddSingleton<IItemsRepository,InMemItemsRepository>(); // singleton powoduje ze 
-            // id z repozytorium pozostaja te same
-            services.AddSingleton<IItemsRepository, MongoDbItemsRepository>();
+            // services.AddSingleton<IItemsRepository,InMemItemsRepository>(); // opcja bez bazy danych
 
         }
 
@@ -62,7 +67,11 @@ namespace ProjektZaliczeniowy
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProjektZaliczeniowy v1"));
             }
 
-            app.UseHttpsRedirection();
+            if (env.IsDevelopment())
+            {
+                app.UseHttpsRedirection();
+                
+            }
 
             app.UseRouting();
 
