@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace ProjektZaliczeniowy.Entities
+namespace ProjektZaliczeniowy.Dtos
 {
-    public record Score
+    public record ScoreDto
     {
         public Guid Id { get; init; }
         public string TeacherName { get; init; }
