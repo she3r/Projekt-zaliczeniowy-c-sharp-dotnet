@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Catalog;
 using Microsoft.AspNetCore.Mvc;
@@ -21,81 +23,103 @@ namespace ProjektZaliczeniowy.Controllers
         {
             _repository = repository;
         }
-        // GET /scores/user_id
-        [HttpGet("{userID}")]
-        public async Task<IEnumerable<ScoreDto>> GetScoresAsync(Guid userID)
+        // GET /scores
+        // [HttpGet]
+        // public async Task<IEnumerable<ItemDto>> GetItemsAsync()
+        // {
+        //     var items = (await _repository.GetItemsAsync()).Select(item => item.AsDto());
+        //     return items;
+        // }
+        
+        // get all scores of student
+        // GET scores/studentName
+        [HttpGet("{studentName}")]
+        public async Task<IEnumerable<ScoreDto>> GetScoresAsync(string studentName)
         {
-            var scores = (await _repository.GetScoresAsync()).Select(score => score.AsDto()).Where(score => score.Id == userID);
+            var scores = (await _repository.GetAllScoresOfStudentAsync(studentName)).Select(score => score.AsDto());
             return scores;
         }
-        // GET /scores/userID/scoreID
-        [HttpGet("{userID}/{scoreID}")]
-        public async Task<ActionResult<ScoreDto>> GetScoreAsync(Guid userID,Guid scoreID)
+        
+        // get particular score
+        // GET scores/studentName/Id
+        [HttpGet("{studentName}/{Id}")]
+        public async Task<ActionResult<ScoreDto>> GetScoreAsync(string studentName, Guid Id)
         {
-            var item = await _repository.GetScoreAsync(userID,scoreID);
-            if (item is null)
+            var score = await _repository.GetScoreOfStudentAsync(studentName, Id);
+            if (score is null || !score.StudentName.Equals(studentName))
             {
                 return NotFound();
             }
 
-            return item.AsDto();
+            return score.AsDto();
         }
-        // POST /scores/userID
-        [HttpPost("{userID}")]
-        public async Task<ActionResult<ScoreDto>> CreateScoreAsync(Guid userID,CreateScoreDto itemDto)
+
+        // post a score for a student
+        // POST /scores     info of studentName in scoreDto
+        [HttpPost]
+        public async Task<ActionResult<ScoreDto>> CreateScoreAsync(CreateScoreDto scoreDto)
         {
-            Score item = new()
+            Score score = new()
             {
-                Id = Guid.NewGuid(), TeacherName = itemDto.TeacherName, Value = itemDto.Value,
+                Id = Guid.NewGuid(), StudentName = scoreDto.StudentName, TeacherName = scoreDto.TeacherName, Value = scoreDto.Value,
                 CreatedDate = DateTimeOffset.UtcNow
             };
-            await _repository.CreateScoreAsync(userID, item);
+            await _repository.CreateScoreAsync(score);
             
             // ReSharper disable once Mvc.ActionNotResolved
-            return CreatedAtAction(nameof(GetScoreAsync), new { id = item.Id }, item.AsDto());
+            return CreatedAtAction(nameof(GetScoreAsync), new { studentName = score.StudentName,id = score.Id }, score.AsDto());
         }
-        // PUT /scores/userID/scoreID
-        [HttpPut("{userID}/{scoreID}")]
-        public async Task<ActionResult> UpdateItemAsync(Guid userID, Guid scoreID, UpdateScoreDto scoreDto)
+        // update score
+        // PUT /items/id
+        [HttpPut("{studentName}/{Id}")]
+        public async Task<ActionResult> UpdateScoreAsync(string studentName, Guid id, UpdateScoreDto scoreDto)
         {
-            var existingItem = await _repository.GetScoreAsync(userID, scoreID);
-            if (existingItem is null)
+            var existingScore = await _repository.GetScoreOfStudentAsync(studentName, id);
+            if (existingScore is null || !existingScore.StudentName.Equals(studentName))
             {
                 return NotFound();
             }
 
-            var updatedItem = existingItem with
+            string teacherName = existingScore.TeacherName;
+
+            if (scoreDto.TeacherName is not null)
             {
-                TeacherName = scoreDto.TeacherName,
-                Value = scoreDto.Value
+                teacherName = existingScore.StudentName;
+            }
+
+            Score updatedScore = existingScore with
+            {
+                Value = scoreDto.Value, TeacherName = teacherName
             };
-            
-            await _repository.UpdateScoreAsync(userID,scoreID,updatedItem);
+
+            await _repository.UpdateScoreOfStudentAsync(updatedScore);
 
             return NoContent();
         }
-        // DELETE /scores/userID/scoreID 
-        [HttpDelete("{userID}/{scoreID}")]
-        public async Task<ActionResult> DeleteItemAsync(Guid userID, Guid scoreID)
+        
+        // delete all scores
+        // DELETE /studentName
+        [HttpDelete("{studentName}")]
+        public async Task<ActionResult> DeleteAllScoresAsync(string studentName)
         {
-            var existingItem = await _repository.GetScoreAsync(userID, scoreID);
-            if (existingItem is null)
+            var existingScoresIds = (await _repository.GetAllScoresOfStudentAsync(studentName)).Select(score => score.Id);
+            await _repository.DeleteAllScoresAsync(studentName);
+            return NoContent();
+        }
+        
+        // delete score
+        // DELETE /studentName/id 
+        [HttpDelete("{studentName}/{Id}")]
+        public async Task<ActionResult> DeleteScoreAsync(string studentName, Guid id)
+        {
+            var existingScore = await _repository.GetScoreOfStudentAsync(studentName, id);
+            if (existingScore is null || !existingScore.StudentName.Equals(studentName))
             {
                 return NotFound();
             }
-            
-            await _repository.DeleteScoreAsync(userID,scoreID);
-            return NoContent();
-        }
-        
-        // DELETE /scores/userID
-        [HttpDelete("{userID}")]
-        public async Task<ActionResult> DeleteUserScores(Guid userID)
-        {
-            await _repository.DeleteUserAsync(userID);
-            return NoContent();
 
+            await _repository.DeleteScoreAsync(studentName, id);
+            return NoContent();
         }
-        
     }
 }

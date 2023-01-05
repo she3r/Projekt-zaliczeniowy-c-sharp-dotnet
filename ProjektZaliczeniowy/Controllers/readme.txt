@@ -1,1 +1,1 @@
-Controller - Management of the REST interface to the business logic
+Controller - Management of the REST interface to the (business) logic

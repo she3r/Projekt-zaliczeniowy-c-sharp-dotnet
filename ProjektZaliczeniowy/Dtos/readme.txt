@@ -1,0 +1,1 @@
+﻿data transfer object - carries data between process of http request and database
