@@ -19,23 +19,9 @@ Zwraca:
     {
         "id": "d9cb83f9-85cb-454a-8ef5-8565d4327cc1",
         "studentName": null,
-        "teacherName": "edward szczypka",
+        "teacherName": "jan kowalski",
         "value": 100,
         "createdDate": "2023-01-06T13:22:28.9913835+00:00"
-    },
-    {
-        "id": "3942c0ca-fba9-4e67-9b90-ebff943b5abc",
-        "studentName": null,
-        "teacherName": "michal lipinski",
-        "value": 17,
-        "createdDate": "2023-01-06T13:29:55.3849411+00:00"
-    },
-    {
-        "id": "c2d59069-04bf-4807-b7ca-c44b738b33a5",
-        "studentName": null,
-        "teacherName": "michal lipinski",
-        "value": 18,
-        "createdDate": "2023-01-06T17:19:28.4858008+00:00"
     }
 ]
 
