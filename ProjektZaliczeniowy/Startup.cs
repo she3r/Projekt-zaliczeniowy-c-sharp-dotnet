@@ -42,6 +42,7 @@ namespace ProjektZaliczeniowy
                 return new MongoClient(settings.ConnectionString);
             }); 
             // singleton powoduje ze id z repozytorium pozostaja te same czyli z kazdym requestem nie tworzy sie nowa kolekcja
+            services.AddSingleton<IScoresRepository, MongoDbScoresRepository>();
             services.AddSingleton<IItemsRepository, MongoDbItemsRepository>();
             
             services.AddControllers(options =>
@@ -53,7 +54,7 @@ namespace ProjektZaliczeniowy
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProjektZaliczeniowy", Version = "v1" });
             });
-            // services.AddSingleton<IItemsRepository,InMemItemsRepository>(); // opcja bez bazy danych
+            // services.AddSingleton<IItemsRepository,InMemItemsRepository>(); // opcja testowa bez bazy danych
 
         }
 

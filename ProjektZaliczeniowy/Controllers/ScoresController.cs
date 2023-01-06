@@ -56,8 +56,8 @@ namespace ProjektZaliczeniowy.Controllers
 
         // post a score for a student
         // POST /scores     info of studentName in scoreDto
-        [HttpPost]
-        public async Task<ActionResult<ScoreDto>> CreateScoreAsync(CreateScoreDto scoreDto)
+        [HttpPost("{studentName}")]
+        public async Task<ActionResult<ScoreDto>> CreateScoreAsync(string studentName, CreateScoreDto scoreDto)
         {
             Score score = new()
             {
@@ -71,7 +71,7 @@ namespace ProjektZaliczeniowy.Controllers
         }
         // update score
         // PUT /items/id
-        [HttpPut("{studentName}/{Id}")]
+        [HttpPut("{studentName}/{id}")]
         public async Task<ActionResult> UpdateScoreAsync(string studentName, Guid id, UpdateScoreDto scoreDto)
         {
             var existingScore = await _repository.GetScoreOfStudentAsync(studentName, id);
@@ -84,7 +84,7 @@ namespace ProjektZaliczeniowy.Controllers
 
             if (scoreDto.TeacherName is not null)
             {
-                teacherName = existingScore.StudentName;
+                teacherName = existingScore.TeacherName;
             }
 
             Score updatedScore = existingScore with
@@ -102,7 +102,7 @@ namespace ProjektZaliczeniowy.Controllers
         [HttpDelete("{studentName}")]
         public async Task<ActionResult> DeleteAllScoresAsync(string studentName)
         {
-            var existingScoresIds = (await _repository.GetAllScoresOfStudentAsync(studentName)).Select(score => score.Id);
+            // var existingScoresIds = (await _repository.GetAllScoresOfStudentAsync(studentName)).Select(score => score.Id);
             await _repository.DeleteAllScoresAsync(studentName);
             return NoContent();
         }
@@ -110,15 +110,15 @@ namespace ProjektZaliczeniowy.Controllers
         // delete score
         // DELETE /studentName/id 
         [HttpDelete("{studentName}/{Id}")]
-        public async Task<ActionResult> DeleteScoreAsync(string studentName, Guid id)
+        public async Task<ActionResult> DeleteScoreAsync(string studentName, Guid Id)
         {
-            var existingScore = await _repository.GetScoreOfStudentAsync(studentName, id);
+            var existingScore = await _repository.GetScoreOfStudentAsync(studentName, Id);
             if (existingScore is null || !existingScore.StudentName.Equals(studentName))
             {
                 return NotFound();
             }
 
-            await _repository.DeleteScoreAsync(studentName, id);
+            await _repository.DeleteScoreAsync(studentName, Id);
             return NoContent();
         }
     }

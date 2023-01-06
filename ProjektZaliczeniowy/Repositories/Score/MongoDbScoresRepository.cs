@@ -62,7 +62,8 @@ namespace ProjektZaliczeniowy.Repositories
 
         public async Task CreateScoreAsync(Score score)
         {
-            await _database.GetCollection<Score>(score.StudentName).InsertOneAsync(score);
+            string studentName = score.StudentName;
+            await _database.GetCollection<Score>(studentName).InsertOneAsync(score);
         }
 
         public async Task UpdateScoreOfStudentAsync(Score score)
