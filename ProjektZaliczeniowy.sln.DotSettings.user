@@ -1,0 +1,21 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=33d813ed_002Df163_002D4191_002D886e_002Db20b4df1a2e8/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="InvalidTeacherName_CreateScoreDto(len: 101)" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::A4467A84-DADF-4C31-B4F8-2A1B9EB3A0D6::net5.0::Tests.DtoTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::A4467A84-DADF-4C31-B4F8-2A1B9EB3A0D6::net5.0::Tests.ControllerTests&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c7280aeb_002D5502_002D4e56_002D996d_002Dc877043de901/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GetItemAsync_NotExistingItem_ReturnNull" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::A4467A84-DADF-4C31-B4F8-2A1B9EB3A0D6::net5.0::Tests.Tests.GetItemAsync_NotExistingItem_ReturnNull&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::A4467A84-DADF-4C31-B4F8-2A1B9EB3A0D6::net5.0::Tests.Tests.DeleteScoreAsync_NotExistingItem_ReturnNull&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::A4467A84-DADF-4C31-B4F8-2A1B9EB3A0D6::net5.0::Tests.Tests.DeleteScoreAsync_ExistingItem_ReturnNoContent&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=f1be092e_002D3587_002D4259_002D83c3_002Ddc6898e8064e/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="DeleteScoreAsync_ExistingItem_ReturnNoContent" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::A4467A84-DADF-4C31-B4F8-2A1B9EB3A0D6::net5.0::Tests.ControllerTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::A4467A84-DADF-4C31-B4F8-2A1B9EB3A0D6::net5.0::Tests.DtoTests.InvalidValue_CreateScoreDto&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::A4467A84-DADF-4C31-B4F8-2A1B9EB3A0D6::net5.0::Tests.DtoTests&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

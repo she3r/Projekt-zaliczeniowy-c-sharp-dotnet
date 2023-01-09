@@ -25,3 +25,12 @@ Zwraca:
     }
 ]
 
+
+Komendy, zeby zbudowac obrazy i polaczyc je we wspolny network lokalnie, a potem zrobic push na docker hub
+docker run -d --rm --name mongo -p 27017:27017 -v mongodbdata:/data/db -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=1234 mongo
+docker network create projektZaliczeniowyNetwork
+docker run -d --name mongo -p 27017:27017 -v mongodbdata:/data/db -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=1234 --network=projektZaliczeniowyNetwork mongo
+docker run -it --rm -p 8080:80 -e MongoDbSettings:Host=mongo -e MongoDbSettings:Password=1234 --network=projektZaliczeniowyNetwork projektzaliczeniowy:v1
+docker tag projektzaliczeniowy:v1 she3r/projektzaliczeniowy:v1
+docker push she3r/projektzaliczeniowy:v1
+docker run -it --rm -p 8080:80 -e MongoDbSettings:Host=mongo -e MongoDbSettings:Password=1234 --network=projektZaliczeniowyNetwork she3r/projektzaliczeniowy:v1

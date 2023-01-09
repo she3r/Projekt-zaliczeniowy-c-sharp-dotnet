@@ -1,9 +1,11 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+﻿FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base    
+# asp.net framework
 WORKDIR /app
 EXPOSE 80
 #EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+# dotnet sdk
 WORKDIR /src
 COPY ["ProjektZaliczeniowy.csproj", "./"]
 RUN dotnet restore "ProjektZaliczeniowy.csproj"
