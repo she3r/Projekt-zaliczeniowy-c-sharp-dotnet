@@ -33,4 +33,9 @@ docker run -d --name mongo -p 27017:27017 -v mongodbdata:/data/db -e MONGO_INITD
 docker run -it --rm -p 8080:80 -e MongoDbSettings:Host=mongo -e MongoDbSettings:Password=1234 --network=projektZaliczeniowyNetwork projektzaliczeniowy:v1
 docker tag projektzaliczeniowy:v1 she3r/projektzaliczeniowy:v1
 docker push she3r/projektzaliczeniowy:v1
+docker tag mongo she3r/mongo_projektzaliczeniowy:v1
+docker push she3r/mongo_projektzaliczeniowy:v1
+
+docker network create projektZaliczeniowyNetwork
 docker run -it --rm -p 8080:80 -e MongoDbSettings:Host=mongo -e MongoDbSettings:Password=1234 --network=projektZaliczeniowyNetwork she3r/projektzaliczeniowy:v1
+docker run -d --name mongo -p 27017:27017 -v mongodbdata:/data/db -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=1234 --network=projektZaliczeniowyNetwork she3r/mongo_projektzaliczeniowy:v1
